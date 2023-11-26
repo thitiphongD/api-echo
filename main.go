@@ -1,15 +1,12 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/labstack/echo/v4"
+	user "github.com/thitiphongD/api-echo/modules/healthcheck"
 )
 
 func main() {
 	e := echo.New()
-	e.GET("/echo", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, Echo!")
-	})
+	user.HealthCheckHTTP(e)
 	e.Logger.Fatal(e.Start(":8080"))
 }
