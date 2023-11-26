@@ -1,0 +1,15 @@
+ .idea
+ *.exe
+ *.exe~
+ *.dll
+ *.so
+ *.dylib
+ *.test
+ *.out
+ .DS_Store
+ TODO.md
+ logs.txt
+ secret.md
+ .env
+tmp
+.store
