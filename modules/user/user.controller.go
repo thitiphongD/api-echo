@@ -18,7 +18,7 @@ func RegisterUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Password and confirm password do not match"})
 	}
 
-	newUser, err := models.NewUser(requestBody.Username, requestBody.Password, requestBody.Email)
+	newUser, err := models.CreateNewUser(requestBody.Username, requestBody.Password, requestBody.Email)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}

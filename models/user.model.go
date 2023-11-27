@@ -1,28 +1,15 @@
 package models
 
 import (
+	"fmt"
 	"time"
 
-	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
 	"github.com/thitiphongD/api-echo/helpers"
+	"golang.org/x/crypto/bcrypt"
 )
 
-func generateToken(userID uuid.UUID) (string, error) {
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
-	claims["sub"] = userID.String()
-
-	// Sign the token with a secret key
-	signedToken, err := token.SignedString([]byte("your-secret-key")) // Replace with your actual secret key
-	if err != nil {
-		return "", err
-	}
-
-	return signedToken, nil
-}
-
-func NewUser(username, password, email string) (*User, error) {
+func CreateNewUser(username, password, email string) (*User, error) {
 	if err := helpers.StrongPassword(password); err != nil {
 		return nil, err
 	}
@@ -32,7 +19,12 @@ func NewUser(username, password, email string) (*User, error) {
 		return nil, err
 	}
 
-	token, err := generateToken(id)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, fmt.Errorf("failed to hash password: %v", err)
+	}
+
+	token, err := helpers.GenerateToken(id)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +32,7 @@ func NewUser(username, password, email string) (*User, error) {
 	return &User{
 		ID:        id,
 		Username:  username,
-		Password:  password,
+		Password:  string(hashedPassword),
 		Email:     email,
 		Token:     token,
 		Status:    true,
