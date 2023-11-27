@@ -20,14 +20,8 @@ func RegisterUser(c echo.Context) error {
 
 	newUser, err := models.NewUser(requestBody.Username, requestBody.Password, requestBody.Email)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create user"})
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
-
-	// err := db.Database.Create(&newUser).Error
-	// if err != nil {
-	// 	fmt.Println("failed to create User:", err)
-	// 	return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to register user"})
-	// }
 
 	return c.JSON(http.StatusCreated, newUser)
 }

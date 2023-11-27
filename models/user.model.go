@@ -5,6 +5,7 @@ import (
 
 	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
+	"github.com/thitiphongD/api-echo/helpers"
 )
 
 func generateToken(userID uuid.UUID) (string, error) {
@@ -22,6 +23,10 @@ func generateToken(userID uuid.UUID) (string, error) {
 }
 
 func NewUser(username, password, email string) (*User, error) {
+	if err := helpers.StrongPassword(password); err != nil {
+		return nil, err
+	}
+
 	id, err := uuid.NewUUID()
 	if err != nil {
 		return nil, err
