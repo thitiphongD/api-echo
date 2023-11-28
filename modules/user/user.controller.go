@@ -21,15 +21,15 @@ func Login(c echo.Context) error {
 	}
 
 	var user models.User
-	result := db.Database.Where("username = ?", requestBody.Username).First(&user)
+	result := db.Database.Where("email = ?", requestBody.Email).First(&user)
 
 	if result.Error != nil {
-		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid username or password"})
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid email or password"})
 	}
 
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(requestBody.Password))
 	if err != nil {
-		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid username or password"})
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid email or password"})
 	}
 
 	return c.JSON(http.StatusOK, "Login Success")
