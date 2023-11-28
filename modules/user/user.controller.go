@@ -10,6 +10,15 @@ import (
 	"github.com/thitiphongD/api-echo/requests"
 )
 
+func Login(c echo.Context) error {
+	requestBody := &requests.RequestLogin{}
+	if err := c.Bind(requestBody); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid JSON"})
+	}
+
+	return c.JSON(http.StatusOK, requestBody)
+}
+
 func RegisterUser(c echo.Context) error {
 	requestBody := &requests.RequestRegisterUser{}
 	if err := c.Bind(requestBody); err != nil {
