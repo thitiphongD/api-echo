@@ -75,7 +75,7 @@ func GetUser(c echo.Context) error {
 	userID := c.Param("id")
 
 	var user response.ResponseUser
-	if err := db.Database.Model(&models.User{}).Select("username, email, status, role").Where("id = ?", userID).Find(&user).Error; err != nil {
+	if err := db.Database.Model(&models.User{}).Select("username, email, status, role").Where("id = ?", userID).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return c.JSON(http.StatusNotFound, map[string]string{"error": "User not found"})
 		}
