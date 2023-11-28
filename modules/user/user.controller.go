@@ -8,6 +8,7 @@ import (
 	"github.com/thitiphongD/api-echo/helpers"
 	"github.com/thitiphongD/api-echo/models"
 	"github.com/thitiphongD/api-echo/requests"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func Login(c echo.Context) error {
@@ -16,7 +17,19 @@ func Login(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid JSON"})
 	}
 
-	return c.JSON(http.StatusOK, requestBody)
+	var user models.User
+	result := db.Database.Where("username = ?", requestBody.Username).First(&user)
+
+	if result.Error != nil {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid username or password"})
+	}
+
+	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(requestBody.Password))
+	if err != nil {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid username or password"})
+	}
+
+	return c.JSON(http.StatusOK, "Login Success")
 }
 
 func RegisterUser(c echo.Context) error {
