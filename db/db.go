@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/thitiphongD/api-echo/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -26,7 +27,10 @@ func InitDB() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	// db.AutoMigrate(&models.Logger{})
+	err = db.AutoMigrate(&models.User{})
+	if err != nil {
+		return nil, err
+	}
 
 	Database = db
 

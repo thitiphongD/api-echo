@@ -43,7 +43,7 @@ func CreateNewUser(username, password, email string) (*User, error) {
 }
 
 type User struct {
-	ID        uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primary_key"`
+	ID        uuid.UUID `gorm:"primary_key"`
 	Username  string    `gorm:"not null"`
 	Password  string    `gorm:"not null"`
 	Email     string    `gorm:"not null;unique"`

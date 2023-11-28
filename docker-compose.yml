@@ -20,20 +20,20 @@ services:
   #   ports:
   #     - 80:80
 
-  api:
-    build:
-      dockerfile: Dockerfile
-      context: .
-    container_name: echo-api
-    environment:
-      - POSTGRES_HOST=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password123
-      - POSTGRES_DB=echo-gorm
-      - POSTGRES_PORT=5432
-    volumes:
-      - .:/app
-    ports:
-      - 8080:8080
-    depends_on:
-      - postgres
+  # api:
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: .
+  #   container_name: echo-api
+  #   environment:
+  #     - POSTGRES_HOST=postgres
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=password123
+  #     - POSTGRES_DB=echo-gorm
+  #     - POSTGRES_PORT=5432
+  #   volumes:
+  #     - .:/app
+  #   ports:
+  #     - 8080:8080
+  #   depends_on:
+  #     - postgres
