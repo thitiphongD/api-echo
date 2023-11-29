@@ -9,7 +9,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func NewUser(username, password, email string) (*User, error) {
+func NewUser(email, username, password string) (*User, error) {
 	if err := helpers.StrongPassword(password); err != nil {
 		return nil, err
 	}
@@ -31,9 +31,9 @@ func NewUser(username, password, email string) (*User, error) {
 
 	return &User{
 		ID:        id,
+		Email:     email,
 		Username:  username,
 		Password:  string(hashedPassword),
-		Email:     email,
 		Token:     token,
 		Status:    true,
 		Role:      "user",
