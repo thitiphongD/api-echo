@@ -20,11 +20,19 @@ func Login(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid JSON"})
 	}
 
+	if requestBody.Email == "" || requestBody.Password == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Email and password are required"})
+	}
+
 	var user models.User
 	result := db.Database.Where("email = ?", requestBody.Email).First(&user)
 
 	if result.Error != nil {
-		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid email or password"})
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return c.JSON(http.StatusUnauthorized, map[string]string{"error": "User not found"})
+		} else {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
+		}
 	}
 
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(requestBody.Password))
